@@ -3,7 +3,7 @@
 import abc
 
 from hadoop.io import WritableUtils, InputStream, OutputStream, Text
-from ebay_datameta_core.base import DateTime
+from ebay_datameta_core.base import DateTime, SemVer
 from decimal import *
 from collections import *
 from bitarray import bitarray
@@ -28,11 +28,11 @@ class InOutable:
 
     @staticmethod
     def writeVersion(do, ver):
-        WritableUtils.writeVInt(do, ver)
+        Text.writeString(do, ver.semanticPartsOnly()) # Write a semantic version - semantic parts only to save space.
 
     @staticmethod
     def readVersion(di):
-        return WritableUtils.readVInt(di)
+        return SemVer(Text.readString(di))
 
 
 class BytesDataIoUtil:
@@ -114,13 +114,15 @@ class DataMetaHadoopUtil:
     @staticmethod
     def writeLongArray(do, array):
         WritableUtils.writeVInt(do, len(array))
-        for v in array:
-            WritableUtils.writeVLong(do, v)
+        if len(array) > 0:
+            for v in array:
+                WritableUtils.writeVLong(do, v)
 
     @staticmethod
     def readLongArray(di):
         n = WritableUtils.readVInt(di)
         result = []
+        if n < 1: return result
         for i in range(n):
             result.append(WritableUtils.readVLong(di))
         return result
@@ -531,10 +533,8 @@ class DataMetaHadoopUtil:
         longs = [] # resuling array of longs
         bitLen = len(ba) # length in bits
         i8Len = bitLen / 64 # length in Longs
-        print("BL=%d, i8L =%d, mod=%d" %(bitLen, i8Len, bitLen % 64))
 
         if bitLen % 64 != 0: i8Len += 1
-        print("BL=%d, i8L =%d, mod=%d" %(bitLen, i8Len, bitLen % 64))
 
         ulo = uint64(0)
         for ix in range(bitLen):
@@ -559,10 +559,23 @@ class DataMetaHadoopUtil:
         return ba
 
     @staticmethod
+    def trimToUsed(ba):
+        # Trim the given array to only the part that is used (non-zeros)
+        for i in range(len(ba) - 1, -1, -1):
+            if ba[i] != 0: return ba[0:i+1]
+        return []
+
+
+    @staticmethod
     def writeBitArray(do, ba):
-        DataMetaHadoopUtil.writeLongArray(do, DataMetaHadoopUtil.bitArrayToLongs(ba))
+        longs = DataMetaHadoopUtil.bitArrayToLongs(ba)
+        used = DataMetaHadoopUtil.trimToUsed(longs)
+        DataMetaHadoopUtil.writeLongArray(do, used)
 
     @staticmethod
     def readBitArray(di):
-        return DataMetaHadoopUtil.longsToBitArray(DataMetaHadoopUtil.readLongArray(di))
+        longs = DataMetaHadoopUtil.readLongArray(di)
+        # Can't pass an empty array to this method; pass one zero instead.
+        # Zero length array means no flags are set, and that's exactly what [0] means too.
+        return DataMetaHadoopUtil.longsToBitArray(longs if len(longs) > 0 else [0])
 

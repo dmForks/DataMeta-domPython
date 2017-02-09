@@ -64,6 +64,7 @@ class DateTime():
 
     FORMAT_WITH_TZ = "%Y-%m-%dT%H:%M:%S%Z"
     FORMAT = "%Y-%m-%dT%H:%M:%S"
+
     @staticmethod
     def fromMillis(ms):
         return datetime.utcfromtimestamp(ms // 1000)
@@ -79,9 +80,9 @@ class DateTime():
 
     @staticmethod
     def toIsoUtc(dt):
-       return "%sUTC" % dt.strftime(DateTime.FORMAT) # adding %Z specs to this format does not render the TZ, must append it manually
+        return "%sUTC" % dt.strftime(DateTime.FORMAT) # adding %Z specs to this format does not render the TZ, must append it manually
 
-
+# Implementation of a Semantic Version for DataMeta, see http://semver.org
 # noinspection PyCompatibility
 class SemVer():
     DiffLevel = Enum("DiffLevel", "NONE MAJOR MINOR UPDATE BUILD")
@@ -192,6 +193,6 @@ class SemVer():
         return self._source
 
     def longStr(self):
-        return "%s{%s(%s}" %(self.__class__.__name__, self._source, self._semanticPartsOnly)
+        return "%s{%s(%s)}" %(self.__class__.__name__, self._source, self._semanticPartsOnly)
 
 
