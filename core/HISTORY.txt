@@ -1,4 +1,7 @@
 Release history:
 
+* 1.0.1 - 2017-02-25 by mub
+    * Added canned pattern named "uuid" for strings
+
 * 1.0.0 - 2017-01-15 by mub
 
