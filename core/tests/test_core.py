@@ -60,6 +60,38 @@ def test_bad_email():
     assert m is None, "Canned RegEx email test succeeded for %s while it should not" % bad_email
 
 
+def test_good_uuid_lowercase():
+    """If a valid uuid passes the canned test as it should?"""
+    good_uuid_lowercase = "7cfb2470-b600-4eb3-a2cd-c1439e45b91f"
+    m = CannedRe.UUID.match(good_uuid_lowercase)
+    #    print getmembers(m)
+    assert m is not None, "Canned RegEx uuid test failed for %s" % good_uuid_lowercase
+    assert m.string == good_uuid_lowercase
+
+
+def test_good_uuid_uppercase():
+    """If a valid UUID passes the canned test as it should?"""
+    good_uuid_uppercase = "7CFB2470-B600-4EB3-A2CD-C1439E45B91F"
+    m = CannedRe.UUID.match(good_uuid_uppercase)
+    #    print getmembers(m)
+    assert m is not None, "Canned RegEx UUID test failed for %s" % good_uuid_uppercase
+    assert m.string == good_uuid_uppercase
+
+
+def test_bad_uuid_lowercase():
+    """If an invalid uuid passes the canned test as it should not?"""
+    bad_uiid_lower = "7cfb2470-b600-4eb3-a2cd-c1439e45b91g"
+    m = CannedRe.UUID.match(bad_uiid_lower)
+    assert m is None, "Canned RegEx uiid test succeeded for %s while it should not" % bad_uiid_lower
+
+
+def test_bad_uuid_uppercase():
+    """If an invalid UUID passes the canned test as it should not?"""
+    bad_uiid_upper = "7CFB2470-B600-4EB3-A2CD-C1439E45B91G"
+    m = CannedRe.UUID.match(bad_uiid_upper)
+    assert m is None, "Canned RegEx uiid test succeeded for %s while it should not" % bad_uiid_upper
+
+
 # noinspection PyUnusedLocal,PyUnresolvedReferences
 def test_verifiable_abstract():
     with pytest.raises(TypeError):
@@ -283,6 +315,8 @@ def getKitchenSink():
     k.setIsMeasurable(False)
     k.setComments("Everything is hunky-dory!")
     k.setHomePage("http://www.google.com:8080/blah/meh?v=a&a=v")
+    k.setUuidLower("7cfb2470-b600-4eb3-a2cd-c1439e45b91f")
+    k.setUuidUpper("7CFB2470-B600-4EB3-A2CD-C1439E45B91F")
     k.setWorkPage("https://www.microsoft.com")
     k.setHomeEmail("me@domain.com")
     k.setHomeZip("12345-6789")
