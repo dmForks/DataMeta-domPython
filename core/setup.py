@@ -46,7 +46,7 @@ class PyTest(TestCommand):
 
 setup(
     name='ebay-datameta-core',
-    version="1.0.0",
+    version="1.0.1",
     url='https://github.com/eBayDataMeta/DataMeta',
     license='Apache-2.0',
     author='Michael Bergens',

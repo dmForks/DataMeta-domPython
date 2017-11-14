@@ -370,6 +370,8 @@ class KitchenSink(Verifiable):
         self.__lastFirstName = None
         self.__emb = None
         self.__embo = None
+        self.__uuidLower = None
+        self.__uuidUpper = None
         self.__otherNsRef = None
 
     def getVersion(self):
@@ -608,6 +610,20 @@ class KitchenSink(Verifiable):
         if val is None: raise AttributeError("The \"None\" argument passed to the setter of the required field \"homeEmail\" on the class KitchenSink.")
         self.__homeEmail = val
 
+    def getUuidLower(self):
+        return self.__uuidLower
+
+    def setUuidLower(self, val):
+        if val is None: raise AttributeError("The \"None\" argument passed to the setter of the required field \"uuidLower\" on the class KitchenSink.")
+        self.__uuidLower = val
+
+    def getUuidUpper(self):
+        return self.__uuidUpper
+
+    def setUuidUpper(self, val):
+        if val is None: raise AttributeError("The \"None\" argument passed to the setter of the required field \"uuidUpper\" on the class KitchenSink.")
+        self.__uuidUpper = val
+
     def getMobilePhone(self):
         return self.__mobilePhone
 
@@ -689,6 +705,8 @@ class KitchenSink(Verifiable):
         if(self.__homePage is None): missingFields.append("homePage");
         if(self.__workPage is None): missingFields.append("workPage");
         if(self.__homeEmail is None): missingFields.append("homeEmail");
+        if(self.__uuidLower is None): missingFields.append("uuidLower");
+        if(self.__uuidUpper is None): missingFields.append("uuidUpper");
         if(self.__homeZip is None): missingFields.append("homeZip");
         if(self.__workZip is None): missingFields.append("workZip");
         if(self.__embo is None): missingFields.append("embo");
@@ -697,6 +715,12 @@ class KitchenSink(Verifiable):
         
         if(CannedRe.CANNED_RES["email"].match(self.__homeEmail) is None):
             raise AttributeError("Property \"homeEmail\" == {{%s}} didn't match canned expression \"email\"" % self.__homeEmail )
+
+        if(CannedRe.CANNED_RES["uuid"].match(self.__uuidLower) is None):
+            raise AttributeError("Property \"uuidLower\" == {{%s}} didn't match canned expression \"uuid\"" % self.__uuidLower )
+
+        if(CannedRe.CANNED_RES["UUID"].match(self.__uuidUpper) is None):
+            raise AttributeError("Property \"uuidUpper\" == {{%s}} didn't match canned expression \"UUID\"" % self.__uuidUpper )
 
         if(self.__mobilePhone is not None and CannedRe.CANNED_RES["phone"].match(self.__mobilePhone) is None):
             raise AttributeError("Property \"mobilePhone\" == {{%s}} didn't match canned expression \"phone\"" % self.__mobilePhone )
